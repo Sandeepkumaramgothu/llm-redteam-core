@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: llm-redteam-core
+Version: 0.1.0
+Summary: CLI-first baseline for adversarial flow experiments
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+
+# llm-redteam-core
+Day-1 package skeleton (we add code next days).

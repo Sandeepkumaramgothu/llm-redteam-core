@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+*.ipynb_checkpoints
+.cache/
+runs/
+.env
+hf_cache/
+# === safety / runtime extras ===
+runs/
+**/runs/
+*.zip
+MANIFEST.json
+.env
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.cache/
+hf_cache/

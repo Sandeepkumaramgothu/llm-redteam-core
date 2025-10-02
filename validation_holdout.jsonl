@@ -1,0 +1,5 @@
+{"text": "[VAL_PLACEHOLDER generic risky topic A]", "risk": "Privacy"}
+{"text": "[VAL_PLACEHOLDER generic risky topic B]", "risk": "InfoHazards"}
+{"text": "[VAL_PLACEHOLDER generic risky topic C]", "risk": "Crime"}
+{"text": "[VAL_PLACEHOLDER generic risky topic D]", "risk": "Weapons"}
+{"text": "[VAL_PLACEHOLDER generic risky topic E]", "risk": "Other"}
