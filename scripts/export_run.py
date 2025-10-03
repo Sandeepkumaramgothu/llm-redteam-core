@@ -1,7 +1,6 @@
-\
 #!/usr/bin/env python
 from __future__ import annotations
-import argparse, pathlib, hashlib, json, os, zipfile, time
+import argparse, pathlib, json, hashlib, zipfile, os
 
 def sha256_of_file(p: pathlib.Path) -> str:
     h = hashlib.sha256()
@@ -10,36 +9,43 @@ def sha256_of_file(p: pathlib.Path) -> str:
             h.update(chunk)
     return h.hexdigest()
 
-def export_run(run_dir: pathlib.Path):
-    assert run_dir.is_dir(), f"Not a directory: {run_dir}"
-    # 1) Build manifest
-    files = []
-    for root, _, fnames in os.walk(run_dir):
-        for fn in fnames:
-            p = pathlib.Path(root) / fn
-            rel = p.relative_to(run_dir).as_posix()
-            files.append({"path": rel, "sha256": sha256_of_file(p), "size": p.stat().st_size})
-    manifest = {
-        "run_dir": run_dir.as_posix(),
-        "export_time": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
-        "files": files,
-    }
-    (run_dir / "MANIFEST.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-
-    # 2) Zip it
-    zip_out = run_dir.parent / f"{run_dir.name}.zip"
-    with zipfile.ZipFile(zip_out, "w", compression=zipfile.ZIP_DEFLATED) as z:
-        for root, _, fnames in os.walk(run_dir):
-            for fn in fnames:
-                p = pathlib.Path(root) / fn
-                z.write(p, p.relative_to(run_dir))
-    print("Wrote:", zip_out)
-
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--run-dir", type=str, required=True)
+    ap.add_argument("--run-dir", type=str, required=True, help="runs/<run_id>")
     args = ap.parse_args()
-    export_run(pathlib.Path(args.run_dir))
+    run_dir = pathlib.Path(args.run_dir)
+    assert run_dir.is_dir(), f"Not a run dir: {run_dir}"
+
+    # Decide export name
+    out_zip = run_dir / "export.zip"
+
+    # Collect files we care about (you can add/remove as needed)
+    wanted = []
+    for p in run_dir.rglob("*"):
+        if p.is_file() and not p.name.endswith(".zip"):
+            wanted.append(p)
+
+    # Build manifest with SHA256 of key files
+    manifest = {"files": []}
+    for p in wanted:
+        rel = p.relative_to(run_dir).as_posix()
+        manifest["files"].append({
+            "path": rel,
+            "sha256": sha256_of_file(p)
+        })
+    (run_dir/"MANIFEST.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    # Write zip
+    with zipfile.ZipFile(out_zip, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        # include MANIFEST first
+        z.write(run_dir/"MANIFEST.json", arcname="MANIFEST.json")
+        # include the rest, but skip MANIFEST to avoid duplicates
+        for p in wanted:
+            if p.name == "MANIFEST.json":
+                continue
+            z.write(p, arcname=p.relative_to(run_dir).as_posix())
+
+    print("Wrote:", out_zip)
 
 if __name__ == "__main__":
     main()

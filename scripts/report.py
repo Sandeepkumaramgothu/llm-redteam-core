@@ -1,7 +1,12 @@
-#!/usr/bin/env python
 from __future__ import annotations
+import sys, pathlib
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+#!/usr/bin/env python
 import argparse, pathlib, json, os
 import pandas as pd, plotly.express as px, plotly.graph_objects as go
+from src.metrics.summary import build_summary_html
 
 def _mask(s, n=80):
     s = (s or "").replace("\n"," ")
@@ -41,6 +46,9 @@ def build_report(run_dir: pathlib.Path):
     if run_dir.is_file():
         run_dir = run_dir.parent
     assert run_dir.is_dir(), f"Not a run dir: {run_dir}"
+
+    # Executive Summary card
+    summary_html = build_summary_html(run_dir)
 
     # Train metrics
     mpath = run_dir / "metrics.csv"
@@ -107,7 +115,53 @@ def build_report(run_dir: pathlib.Path):
     else:
         html_hm_val = "<p>No per-risk validation data.</p>"
 
+
+    # ----- Cost section -----
+    # ----- Cost section -----
+    import pandas as _pd
+    import plotly.express as _px
+
+    cost_path = run_dir / "costs.csv"
+    if cost_path.exists():
+        _dfc = _pd.read_csv(cost_path)
+
+        # headline: total + optional cost per risky
+        try:
+            # Try to read TOTAL row if present
+            total_row = _dfc.tail(1).iloc[0]
+            total_cost = float(total_row["usd_cost"])
+        except Exception:
+            total_cost = float(_dfc["usd_cost"].sum())
+
+        _mpath = run_dir / "metrics.csv"
+        risky = 0
+        if _mpath.exists():
+            _dfm = _pd.read_csv(_mpath)
+            risky = int((_dfm["ASR"] * _dfm["n"]).sum())
+
+        if risky > 0:
+            html_cost_headline = f"<p><b>Total cost:</b> ${total_cost:.4f} &nbsp; | &nbsp; <b>Cost per risky:</b> ${total_cost/risky:.4f}</p>"
+        else:
+            html_cost_headline = f"<p><b>Total cost:</b> ${total_cost:.4f}</p>"
+
+        # bar: cost per numeric iteration only
+        _dfc_iter = _dfc[_dfc["iteration"].apply(lambda x: str(x).isdigit())]
+        if len(_dfc_iter):
+            _figc = _px.bar(_dfc_iter, x="iteration", y="usd_cost", text="usd_cost", title="Cost per iteration (USD)")
+            _figc.update_traces(texttemplate="$%{y:.4f}")
+            _figc.update_layout(yaxis=dict(ticksuffix=""), xaxis=dict(dtick=1), height=420)
+            html_cost_bar = _figc.to_html(full_html=False, include_plotlyjs=False)
+        else:
+            html_cost_bar = "<p>No iteration costs.</p>"
+
+        html_cost_table = _dfc.to_html(index=False)
+    else:
+        html_cost_headline = "<p>No cost data yet. Run scripts/costs.py for this run.</p>"
+        html_cost_bar = ""
+        html_cost_table = ""
     # Latest iter details
+    # Latest iter details
+
     iterd = run_dir / f"iter_{latest:04d}"
     if not iterd.exists():
         iters = sorted([p for p in run_dir.glob("iter_*") if p.is_dir()])
@@ -137,6 +191,24 @@ def build_report(run_dir: pathlib.Path):
     html = f'''
     <html><head><meta charset='utf-8'><title>Run Report</title></head>
     <body style="font-family: Arial, sans-serif; max-width: 1100px; margin: auto;">
+  <div style="margin:10px 0;padding:10px;border:1px solid #eee;border-radius:10px;">
+    <h2>Per-Iteration Sankey Index</h2>
+    <p><a href="sankey_index.html">Open list of all Sankey charts</a></p>
+  </div>
+
+  <div style="margin:10px 0;padding:10px;border:1px dashed #bbb;border-radius:10px;">
+    <h2>Full Data (Unmasked)</h2>
+    <p><a href="full_data.html">Open all prompts & responses (no masking)</a> &nbsp; | &nbsp;        <a href="full_data.csv">Download CSV</a></p>
+  </div>
+
+  <div style="margin:10px 0;padding:10px;border:1px solid #eee;border-radius:10px;">
+    <h2>Adversarial Flow & Extras</h2>
+    <p><a href="overview.html">Training Overview (ASR vs Capability + Diversity)</a></p>
+    <p><a href="fluctuation.html">Fluctuation Summary (Fₚ & Fₜ)</a></p>
+    <p><a href="validation_leaderboard.html">Validation Leaderboard</a> &nbsp; | &nbsp; <a href="validation_flow.html">Validation Flow</a></p>
+    <p>Per-iteration Sankey files live under each <code>iter_XXXX/sankey.html</code>.</p>
+  </div>
+      {summary_html}
       <h1>Run Report</h1>
       {header_info}
       <h2>TRAIN — ASR & Toxicity</h2>

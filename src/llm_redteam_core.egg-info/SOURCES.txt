@@ -14,6 +14,7 @@ src/llm_redteam_core.egg-info/top_level.txt
 src/metrics/capability.py
 src/metrics/diversity.py
 src/metrics/riskstats.py
+src/metrics/summary.py
 src/metrics/validation.py
 src/models/__init__.py
 src/models/llm_hf.py
