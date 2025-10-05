@@ -11,7 +11,9 @@ models:
   temperature: 0.7
   top_p: 0.95
 data:
-  seeds_file: data/dna/dna_seeds.jsonl
+  seeds_path: "data/dna/dna_seeds.jsonl"
+  dna_seeds_path: "data/dna/dna_seeds.jsonl"
+  seeds_file: "data/dna/dna_seeds.jsonl"
 run:
   iterations: 5
   seeds_per_iter: 25
