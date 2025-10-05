@@ -1,0 +1,5 @@
+
+regex:\bhf_[A-Za-z0-9]{30,}\b==>HF_TOKEN_REDACTED
+regex:\bsk-[A-Za-z0-9]{20,}\b==>OPENAI_KEY_REDACTED
+regex:OPENAI_API_KEY\s*=\s*['\"][^'\"]+['\"]==>OPENAI_API_KEY='${ENV}'
+regex:HUGGING_FACE_HUB_TOKEN\s*=\s*['\"][^'\"]+['\"]==>HUGGING_FACE_HUB_TOKEN='${ENV}'
