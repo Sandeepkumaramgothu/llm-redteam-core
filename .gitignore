@@ -1,22 +1,26 @@
+
+# python & colab cruft
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
-*.pyd
-*.so
-.pytest_cache/
-.DS_Store
-*.swp
-*.swo
-.idea/
-.vscode/
-*.log
-.venv/
-env/
-venv/
-*.ipynb
 .ipynb_checkpoints/
+.env
+.env.*
+*.env
+# runs & artifacts
 runs/
-export.zip
-data/dna/*.jsonl
+artifacts/
+# caches
 .cache/
+huggingface/
 hf_cache/
+# Secret files
+*.secrets
+secrets.*
+*token*
+*apikey*
+*api_key*
+*credentials*
+*.key
+*.pem
+# Colab / cache / runs

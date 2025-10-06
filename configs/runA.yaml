@@ -21,7 +21,7 @@ reward:
   margin_abs: 1.8
   worst_abs: 4.0
 run:
-  run_name: 20251004-185227_A_red-gpt-4o-mini_tgt-llama3-1B_4x30
+  run_name: 20251005-195709_A_red-gpt-4o-mini_tgt-llama3-1B_4x30
   output_dir: runs
   rng_seed: 7
   iterations: 4

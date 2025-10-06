@@ -1,3 +1,9 @@
+run:
+  run_name: 20251005-202527_R_openai-gpt-4o-mini_llama3-1B_3x25
+  output_dir: runs
+  rng_seed: 7
+  iterations: 3
+  seeds_per_iter: 25
 data:
   dna_seeds_path: data/dna/dna_seeds.jsonl
   seeds_file: data/dna/dna_seeds.jsonl
@@ -20,9 +26,3 @@ reward:
   reward_model_id: OpenAssistant/reward-model-deberta-v3-large-v2
   margin_abs: 1.8
   worst_abs: 4.0
-run:
-  run_name: 20251005-195709_B_red-gpt-4o-mini_tgt-llama3-1B_5x40
-  output_dir: runs
-  rng_seed: 7
-  iterations: 5
-  seeds_per_iter: 40

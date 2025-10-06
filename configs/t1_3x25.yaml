@@ -21,7 +21,7 @@ reward:
   margin_abs: 1.8
   worst_abs: 4.0
 run:
-  run_name: 20251004-185239_T1_openai-gpt-4o-mini_llama3-1B_3x25
+  run_name: 20251005-195712_T1_openai-gpt-4o-mini_llama3-1B_3x25
   output_dir: runs
   rng_seed: 7
   iterations: 3
