@@ -1,0 +1,39 @@
+name: "AdversaFlow_Jailbreak_Enhanced"
+description: "Jailbreak attack with red model refinement and few-shot"
+seed: 42
+
+output_dir: "runs"        # Directory for outputs/logs
+log_level: "debug"        # Verbosity level
+
+paths:
+  seeds: "data/dna/seeds.jsonl"
+  runs: "runs"
+
+attack:
+  n_seeds: 50
+  n_iters: 10
+  use_ledger: true
+  save_every: 5            # Save checkpoint every 5 iterations
+
+target:
+  hf_model: "meta-llama/Llama-3.2-1B-Instruct"
+  use_lora: false
+  gen:
+    max_new_tokens: 512
+    temperature: 0.7
+    top_p: 0.9
+    do_sample: true
+    repetition_penalty: 1.05
+
+red:
+  strategy: "jailbreak"    # Correct strategy setting
+  red_model: "gpt-3.5-turbo"
+  source: "openai"
+  temperature: 0.9
+  max_tokens: 200
+  use_red_refinement: true  # Enables red model refinement step
+  use_few_shot: true
+  few_shot_dir: "data/few_shot"
+  few_shot_n: 5
+
+debug: true
