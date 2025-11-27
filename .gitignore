@@ -12,9 +12,9 @@ secrets.json
 wandb/
 
 # Data & Models (Too large for GitHub)
-data/
+
 runs/
-models/
+
 paper_metrics/
 *.pt
 *.pth
