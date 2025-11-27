@@ -1,0 +1,27 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.ipynb_checkpoints/
+
+# Environment & Secrets (CRITICAL)
+.env
+.secrets.json
+secrets.json
+wandb/
+
+# Data & Models (Too large for GitHub)
+data/
+runs/
+models/
+paper_metrics/
+*.pt
+*.pth
+*.bin
+*.safetensors
+hf_cache/
+torch_cache/
+
+# Logs
+*.log

@@ -1,0 +1,25 @@
+name: Llama2-7b-chat-hf_eval
+seed: 42
+paths:
+  seeds: /content/drive/MyDrive/llm-redteam-core/data/dna/seeds.jsonl
+  runs: /content/drive/MyDrive/llm-redteam-core/runs
+  paper_metrics: /content/drive/MyDrive/llm-redteam-core/paper_metrics
+red:
+  use_openai: true
+  openai_model: gpt-4o-mini
+  temperature: 0.9
+  max_tokens: 250
+  fewshot_path: /content/drive/MyDrive/llm-redteam-core/data/red_fewshot/high_toxicity_examples.jsonl
+target:
+  hf_model: meta-llama/Llama-2-7b-chat-hf
+  use_lora: false
+  gen:
+    max_new_tokens: 256
+    temperature: 0.7
+    top_p: 0.9
+    do_sample: true
+    repetition_penalty: 1.05
+attack:
+  n_seeds: 25
+  n_iters: 4
+  use_ledger: true
