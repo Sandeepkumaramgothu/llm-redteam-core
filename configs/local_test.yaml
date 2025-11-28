@@ -1,0 +1,20 @@
+name: Local Test Run
+seed: 42
+paths:
+  seeds: data/dna/seeds.jsonl
+  runs: runs
+  paper_metrics: paper_metrics
+red:
+  use_openai: false
+target:
+  hf_model: gpt2
+  use_lora: false
+  gen:
+    max_new_tokens: 50
+    temperature: 0.7
+    top_p: 0.9
+    do_sample: true
+attack:
+  n_seeds: 2
+  n_iters: 1
+  use_ledger: false

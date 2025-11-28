@@ -9,6 +9,60 @@ Complete implementation of adversarial red-teaming for Large Language Models fol
 
 ---
 
+## 🚀 Running on Google Colab (Free GPU)
+
+**Recommended Method**: Use our persistent workflow to run this project on Google Colab's free GPUs while editing code in VS Code.
+
+### 1. Setup (One-Time)
+1.  Upload `notebooks/colab_ssh_setup.ipynb` to your **Google Drive**.
+2.  Open the notebook in Google Colab.
+3.  Run the cells. This will:
+    - Mount your Google Drive.
+    - Clone this repository to `/content/drive/MyDrive/llm-redteam-core`.
+    - Generate an SSH command (e.g., `ssh root@...`).
+
+### 2. Connect via VS Code
+1.  Copy the SSH command from the notebook output.
+2.  Open VS Code on your local machine.
+3.  Use **Remote-SSH: Connect to Host...** and paste the command.
+4.  Enter password: `redteam123`.
+
+### 3. Open Project
+1.  In the remote VS Code window, go to **File > Open Folder**.
+2.  Select `/content/drive/MyDrive/llm-redteam-core`.
+3.  **Done!** Any file you save is instantly saved to your Google Drive.
+
+---
+
+## 📋 Quick Start (Local)
+
+### 1. Installation
+
+```bash
+# Clone repository
+git clone https://github.com/Sandeepkumaramgothu/llm-redteam-core
+cd llm-redteam-core
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Run Test Attack
+
+```bash
+# Run a quick test with 2 seeds
+python scripts/run_attack.py --config configs/local_test.yaml
+```
+
+### 3. View Results
+
+```bash
+# Launch dashboard
+python -m streamlit run app.py
+```
+
+---
+
 ## 🎯 Features
 
 ✅ **Complete AdversaFlow Implementation**
@@ -36,64 +90,27 @@ Complete implementation of adversarial red-teaming for Large Language Models fol
 
 ---
 
-## 📋 Quick Start
-
-### 1. Installation
-
-\`\`\`bash
-# Clone repository
-git clone https://github.com/yourusername/llm-redteam-core
-cd llm-redteam-core
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Setup API keys
-cp .env.example .env
-# Edit .env with your API keys
-\`\`\`
-
-### 2. Download Dataset
-
-\`\`\`bash
-python scripts/download_dna.py --output data/dna/seeds.jsonl
-\`\`\`
-
-### 3. Run Attack
-
-\`\`\`bash
-python scripts/run_attack.py --config configs/openai_llama3.yaml
-\`\`\`
-
-### 4. Generate Report
-
-\`\`\`bash
-python scripts/generate_report.py --run-dir runs/YYYYMMDD_HHMMSS
-\`\`\`
-
----
-
 ## 🏗️ Project Structure
 
-\`\`\`
+```
 llm-redteam-core/
 ├── src/
-│   ├── core/           # Core modules
-│   └── utils/          # Utilities
+│   ├── core/           # Core modules (engine, strategies)
+│   └── utils/          # Utilities (scoring, metrics)
 ├── scripts/            # Executable scripts
 ├── configs/            # Configuration files
-├── data/               # Datasets
+├── notebooks/          # Colab setup notebooks
 ├── runs/               # Experiment outputs
 └── paper_metrics/      # Paper-style metrics
-\`\`\`
+```
 
 ---
 
 ## ⚙️ Configuration
 
-Edit `configs/base.yaml`:
+Edit `configs/base.yaml` to customize your attack:
 
-\`\`\`yaml
+```yaml
 attack:
   n_seeds: 100        # Number of seeds to test
   n_iters: 3          # Iterations per seed
@@ -105,7 +122,7 @@ red:
 target:
   hf_model: meta-llama/Llama-3.2-1B-Instruct
   use_lora: false
-\`\`\`
+```
 
 ---
 
@@ -122,23 +139,9 @@ target:
 
 ### Attack Success Rate (ASR)
 
-\`\`\`
+```
 ASR = (Non-refusal responses with L2/L3 risk) / Total queries × 100%
-\`\`\`
-
----
-
-## 🎨 Visualization
-
-The framework generates:
-
-1. **Sankey Flow Diagram**: Multi-level adversarial flow
-2. **Risk Distribution**: Bar charts of L0-L3 levels
-3. **Toxicity Analysis**: Heatmaps and histograms
-4. **Success Metrics**: ASR over iterations
-5. **Embeddings**: UMAP projections
-
-All visualizations are compiled into a single interactive HTML report.
+```
 
 ---
 
@@ -146,7 +149,7 @@ All visualizations are compiled into a single interactive HTML report.
 
 If you use this code, please cite the AdversaFlow paper:
 
-\`\`\`bibtex
+```bibtex
 @article{deng2025adversaflow,
   title={AdversaFlow: Visual Red Teaming for Large Language Models with Multi-Level Adversarial Flow},
   author={Deng, Dazhen and Zhang, Chuhan and Zheng, Huawei and Pu, Yuwen and Ji, Shouling and Wu, Yingcai},
@@ -157,7 +160,7 @@ If you use this code, please cite the AdversaFlow paper:
   year={2025},
   publisher={IEEE}
 }
-\`\`\`
+```
 
 ---
 
@@ -185,13 +188,3 @@ This framework is for **research and security testing only**.
 - Comply with terms of service
 - Results should inform safety improvements
 - Not for malicious purposes
-
----
-
-## 📧 Contact
-
-For questions or issues, please open a GitHub issue or contact the authors.
-
----
-
-**Built with ❤️ for AI Safety Research**

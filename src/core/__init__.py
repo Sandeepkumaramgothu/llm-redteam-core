@@ -20,11 +20,17 @@ except ImportError as e:
     print(f"⚠️  Could not import strategies: {e}")
     strategies = None
 
+print("Attempting to import engine...", flush=True)
 try:
     from . import engine
     __all__.append("engine")
+    print("Successfully imported engine module", flush=True)
 except ImportError as e:
-    print(f"⚠️  Could not import engine: {e}")
+    print(f"⚠️  Could not import engine: {e}", flush=True)
+    with open("import_error.log", "w") as f:
+        f.write(f"ImportError: {e}\n")
+        import traceback
+        traceback.print_exc(file=f)
     engine = None
 
 # Summary

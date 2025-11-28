@@ -110,34 +110,6 @@ Complete YAML structure:
 name: "My Attack"                    # Configuration name
 seed: 42                             # Random seed for reproducibility
 
-paths:
-  seeds: "data/dna/seeds.jsonl"      # Seed prompts file
-  runs: "runs"                       # Output directory
-  paper_metrics: "paper_metrics"     # Report directory
-
-red:                                 # Red team configuration
-  use_openai: true                   # Use OpenAI API
-  openai_model: "gpt-4o-mini"        # OpenAI model
-  temperature: 0.9                   # Sampling temperature
-  max_tokens: 250                    # Max tokens per generation
-  fewshot_path: "data/red_fewshot/..." # Few-shot examples
-
-target:                              # Target model configuration
-  hf_model: "gpt2-xl"                # Hugging Face model ID
-  use_lora: false                    # Apply LoRA fine-tuning
-  gen:                               # Generation parameters
-    max_new_tokens: 256
-    temperature: 0.8
-    top_p: 0.9
-    do_sample: true
-
-attack:                              # Attack parameters
-  n_seeds: 50                        # Number of seeds
-  n_iters: 3                         # Iterations per seed
-  use_ledger: true                   # Track used seeds
-
-═══════════════════════════════════════════════════════════════
-💻 4. COMMAND-LINE INTERFACE
 ═══════════════════════════════════════════════════════════════
 
 Run Attack:
@@ -278,24 +250,6 @@ Self-BLEU:
 
 ═══════════════════════════════════════════════════════════════
 ✅ CHECKLIST
-═══════════════════════════════════════════════════════════════
-
-Before Running:
-  □ Dataset downloaded (Cell 16)
-  □ API keys configured (Cell 4)
-  □ Config file selected/created
-  □ GPU runtime enabled (T4 recommended)
-
-After Running:
-  □ Check results.csv for raw data
-  □ Review report.html for visualizations
-  □ Verify ASR and toxicity metrics
-  □ Export figures if needed
-
-═══════════════════════════════════════════════════════════════
-🎓 BEST PRACTICES
-═══════════════════════════════════════════════════════════════
-
 1. Start Small: Use test.yaml (5 seeds) first
 2. Verify Results: Check report.html for sanity
 3. Scale Gradually: Increase seeds/iterations incrementally
